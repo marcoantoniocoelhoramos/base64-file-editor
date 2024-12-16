@@ -26,13 +26,22 @@ reader.onload = (res) => {
 };
 reader.onerror = (err) => console.log(err);
 
-function validate() {
+function validate(e) {
+try {
+  textToEdit.value = atob(atob(textToEditElement.value.innerText))
+  textToEditElement.value.innerText = textToEdit.value
+
+} catch (e) {
   textToEdit.value = textToEditElement.value.innerText
 }
+}
+function sendToClipboard() {
+  let encryptedText = btoa(btoa(textToEdit.value));
+  navigator.clipboard.writeText(encryptedText)
 
+}
 function downloadNewVersion() {
   let encryptedText = btoa(btoa(textToEdit.value));
-  debugger
   var fileToDownload = new File([encryptedText], file.value?.name ?? "newDocument.txt")
   var downloadElement = window.document.createElement("a");
   let href = URL.createObjectURL(fileToDownload);
@@ -88,7 +97,7 @@ function editFile(files) {
                 data-bs-placement="top"
                 data-bs-title="Tooltip on top"
                 class="btn btn-outline-primary btn-lg mt-3"
-                @click="downloadNewVersion"
+                @click="sendToClipboard"
                 type="button"
             >
               <i class="bi bi-clipboard-fill"></i>
